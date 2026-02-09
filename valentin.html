@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Para Cele 💖</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      text-align: center;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      margin-top: 30px;
+      font-size: 2.5em;
+    }
+
+    p {
+      font-size: 1.2em;
+      margin: 20px;
+      line-height: 1.5;
+    }
+
+    /* GALERÍA */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      margin: 30px;
+      padding: 0 15px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    }
+
+    /* BOTONES */
+    .buttons {
+      margin: 40px;
+      position: relative;
+      height: 150px;
+    }
+
+    button {
+      font-size: 1.2em;
+      padding: 15px 25px;
+      margin: 10px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+    }
+
+    .yes {
+      background-color: #ff4d6d;
+      color: white;
+    }
+
+    .no {
+      background-color: #555;
+      color: white;
+      position: absolute;
+    }
+
+    /* FUEGOS ARTIFICIALES */
+    #fireworks {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      display: none;
+    }
+
+    #message {
+      font-size: 2em;
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Para ti, Cele 💕</h1>
+
+  <p>
+    Desde que llegaste a mi vida, todo es más bonito.  
+    Cada risa, cada momento y cada recuerdo contigo  
+    me confirman que quiero elegirte todos los días.
+  </p>
+
+  <!-- GALERÍA DE 7 FOTOS -->
+  <div class="gallery">
+    <img src="foto1.jpg" alt="Cele y yo">
+    <img src="foto2.jpg" alt="Cele y yo">
+    <img src="foto3.jpg" alt="Cele y yo">
+    <img src="foto4.jpg" alt="Cele y yo">
+    <img src="foto5.jpg" alt="Cele y yo">
+    <img src="foto6.jpg" alt="Cele y yo">
+    <img src="foto7.jpg" alt="Cele y yo">
+  </div>
+
+  <h1>¿Quieres ser mi Valentín? 💘</h1>
+
+  <div class="buttons">
+    <button class="yes" onclick="celebrate()">Sí, acepto 💖</button>
+    <button class="no" id="noBtn">mhmm no 😐</button>
+  </div>
+
+  <canvas id="fireworks"></canvas>
+
+  <div id="message">Te amo, Cele 🎆💖</div>
+
+  <script>
+    /* BOTÓN NO QUE HUYE */
+    const noBtn = document.getElementById("noBtn");
+
+    noBtn.addEventListener("mouseover", moveButton);
+    noBtn.addEventListener("touchstart", moveButton);
+
+    function moveButton() {
+      const x = Math.random() * (window.innerWidth - 150);
+      const y = Math.random() * (window.innerHeight - 80);
+
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+    }
+
+    /* FUEGOS ARTIFICIALES */
+    function celebrate() {
+      document.getElementById("message").style.display = "block";
+      startFireworks();
+    }
+
+    function startFireworks() {
+      const canvas = document.getElementById("fireworks");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvas.style.display = "block";
+
+      let particles = [];
+
+      function createFirework() {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height / 2;
+        const colors = ["#ff4d6d", "#fff", "#ffd166", "#ff99c8"];
+
+        for (let i = 0; i < 50; i++) {
+          particles.push({
+            x,
+            y,
+            radius: Math.random() * 3 + 1,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            vx: (Math.random() - 0.5) * 6,
+            vy: (Math.random() - 0.5) * 6,
+            life: 100
+          });
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach((p, index) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life--;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+
+          if (p.life <= 0) particles.splice(index, 1);
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      setInterval(createFirework, 700);
+      animate();
+    }
+  </script>
+
+</body>
+</html>
